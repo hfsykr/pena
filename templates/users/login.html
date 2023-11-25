@@ -5,10 +5,6 @@
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
 
-    {% if next %}
-        <p>Please login to see this page.</p>
-    {% endif %}
-
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <table>
@@ -24,6 +20,6 @@
         <input type="submit" value="login">
         <input type="hidden" name="next" value="{{ next }}">
     </form>
+
+    <button><a href="{% url 'register' %}">register</a></button>
 {% endblock %}
-</body>
-</html>

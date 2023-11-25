@@ -14,7 +14,7 @@ class Note(models.Model):
 
     def __str__(self):
         '''Object representation'''
-        return self.title
+        return (self.user.username + ":" + self.title)
     
     def save(self, *args, **kwargs):
         '''On save, update timestamps'''

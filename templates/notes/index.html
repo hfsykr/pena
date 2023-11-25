@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p>welcome, {{ user.get_username }}</p>
+
+    {% if note_list %}
+        <ul>
+        {% for note in note_list %}
+            <li><a href="/note/{{ note.id }}/">{{ note.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No notes are available.</p>
+    {% endif %}
+
+    
+    <button><a href="{% url 'logout' %}">logout</a></button>
+{% endblock %}

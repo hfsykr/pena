@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
+from .decorators import redirect_authenticated_user
 
 # Create your views here.
+@redirect_authenticated_user
 def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)

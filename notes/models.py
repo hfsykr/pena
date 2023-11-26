@@ -14,14 +14,12 @@ class Note(models.Model):
 
     def __str__(self):
         '''Object representation'''
-        return (self.user.username + ":" + self.title)
+        return (self.user.username + ":" + (self.title if self.title != "" else "untitled"))
     
     def save(self, *args, **kwargs):
         '''On save, update timestamps'''
         if not self._state.adding:
             self.updated = timezone.now()
         else:
-            if not self.title:
-                self.title = "untitled"
             self.created = timezone.now()
         return super(Note, self).save(*args, **kwargs)

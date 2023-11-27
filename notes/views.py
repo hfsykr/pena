@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .decorators import user_required
 from .models import Note
 from django.db.models.functions import Coalesce
-from .forms import NoteForm
+from .forms import NoteForm, DetailNoteForm
 
 # Create your views here.
 @login_required
@@ -17,7 +17,15 @@ def index(request):
 @login_required
 @user_required
 def detail(request, note_id):
-    return HttpResponse("You're looking at note %s." % note_id)
+    note = Note.objects.get(pk=note_id)
+    if request.method == "POST":
+        form = DetailNoteForm(request.POST, instance=note)
+        if form.is_valid():
+            note = form.save()
+            return redirect("notes:detail", note_id=note.id)
+    else:
+        form = DetailNoteForm(instance=note)
+    return render(request, "notes/detail.html", {"form": form})
 
 @login_required
 def create(request):
@@ -31,3 +39,11 @@ def create(request):
     else:
         form = NoteForm()
     return render(request, "notes/create.html", {"form": form})
+
+@login_required
+@user_required
+def delete(request, note_id):
+    note = Note.objects.get(pk=note_id)
+    note.delete()
+    ref = request.GET.get("ref", "/")
+    return redirect(ref)

@@ -27,6 +27,7 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("register/", register, name="register"),
     path("note/", include("notes.urls")),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 if settings.ADMIN_ENABLED: urlpatterns.append(path('admin/', admin.site.urls))

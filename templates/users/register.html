@@ -1,11 +1,146 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block script_header %}
+    {{ block.super }}
+    <script src="{% static 'users/form.js' %}"></script>
+{% endblock %}
 
 {% block content %}
-    <form method="post" action="{% url 'register' %}">
-        {% csrf_token %}
-        <table>
-            {{ form }}
-        </table>
-        <input type="submit" value="register">
-    </form>
+<div class="flex h-screen bg-white dark:bg-gray-800">
+    <div class="w-3/4 hidden md:block overflow-hidden h-full">
+        <img class="w-full h-full" src="{% static 'users/background.jpg' %}" alt="Login Background">
+    </div>
+    <div class="flex flex-col w-full md:w-1/4 h-full">
+        <div class="flex items-center justify-end w-full px-5 py-2">
+            <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+            </button>  
+        </div>  
+        <form class="flex flex-col justify-center h-full px-5" method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+            <h1 class="text-center text-3xl font-medium mb-5 text-gray-900 dark:text-white">Register</h1>
+            <div class="mb-2">
+                <label for="id_username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your username</label>
+                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="username" autofocus autocomplete="username" maxlength="150" required id="id_username" value="{{ form.username.value|default_if_none:'' }}">
+                {% if form.username.errors %}
+                    <span class="inline-block mt-2 text-xs text-red-500 dark:text-red-400">
+                        <ul id="username_errorlist" class="list-inside">
+                        {% for error in form.username.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                        </ul>
+                    </span>
+                {% else %}
+                    <span id="username_helptext" class="inline-block mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        {{ form.username.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+            <div class="mb-2">
+                <label for="id_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+                <input type="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="email" autocomplete="email" maxlength="254" required id="id_email" value="{{ form.email.value|default_if_none:'' }}">
+                {% if form.email.errors %}
+                    <span class="inline-block mt-2 text-xs text-red-500 dark:text-red-400">
+                        <ul id="email_errorlist" class="list-inside">
+                        {% for error in form.email.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                        </ul>
+                    </span>
+                {% else %}
+                    <span id="email_helptext" class="inline-block mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        {{ form.email.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+            <div class="mb-2">
+                <label for="id_password1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
+                <div class="flex border border-gray-300 dark:border-gray-600 rounded-lg focus-within:outline outline-1 focus-within:outline-blue-500 focus-within:border-blue-500 dark:focus-within:outline-blue-500 dark:focus-within:border-blue-500">
+                    <input type="password" class="bg-gray-50 border-0 rounded-l-lg text-gray-900 text-sm focus:ring-0 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" name="password1" autocomplete="new-password" required id="id_password1">
+                    <button type="button" class="bg-gray-50 dark:bg-gray-700  rounded-r-lg outline outline-none p-2" onclick="onClickPassword(this)">
+                        <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 14">
+                            <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                <path d="M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                <path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z"/>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+                {% if form.password1.errors %}
+                        <span class="inline-block mt-2 text-xs text-red-500 dark:text-red-400">
+                            <ul id="password1_errorlist" class="list-inside">
+                            {% for error in form.password1.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                            </ul>
+                        </span>
+                {% else %}
+                    <span id="password1_helptext" class="inline-block mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        {{ form.password1.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+            <div class="mb-2.5">
+                <label for="id_password2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password confirmation</label>
+                <div class="flex border border-gray-300 dark:border-gray-600 rounded-lg focus-within:outline outline-1 focus-within:outline-blue-500 focus-within:border-blue-500 dark:focus-within:outline-blue-500 dark:focus-within:border-blue-500">
+                    <input type="password" class="bg-gray-50 border-0 rounded-l-lg text-gray-900 text-sm focus:ring-0 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" name="password2" autocomplete="new-password" required id="id_password2">
+                    <button type="button" class="bg-gray-50 dark:bg-gray-700 rounded-r-lg outline outline-none p-2" onclick="onClickPassword(this)">
+                        <svg class="w-6 h-6 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 14">
+                            <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                <path d="M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                <path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z"/>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+                {% if form.password2.errors %}
+                    <span class="inline-block mt-2 text-xs text-red-500 dark:text-red-400">
+                        <ul id="password2_errorlist" class="list-inside">
+                        {% for error in form.password2.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                        </ul>
+                    </span>
+                {% else %}
+                    <span id="password2_helptext" class="inline-block mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        {{ form.password2.help_text }}
+                    </span>
+                {% endif %}
+            </div>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full md:w-24 mb-2 px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Register</button>
+            <input type="hidden" name="next" value="{{ next }}">
+            <p class="text-sm font-medium text-gray-900 dark:text-white">Have an account? login <a href="{% url 'login' %}">here!</a></p>
+        </form>
+    </div>
+</div>
 {% endblock %}
+
+{% block script_footer %}
+    {{ block.super }}
+
+    {% if not form.password1.errors %}
+        <script>
+            // can't iterate trough help_text from django template (it generated like a string not a list)
+            // so i write this to make the class of list (or string) generated customizable by tailwind css.
+            document.querySelectorAll("#password1_helptext ul")[0].classList.add("list-disc", "list-inside");
+        </script>
+    {% endif %}
+    
+    {% if form.errors %}
+        <script>
+            // can't find how to determine if variable an iterable or not in django template
+            // or maybe form.field.errors is not iterable by default
+            // i write this to check if form.field.errors only have 1 error or not.
+            var errorList = ["username_errorlist", "email_errorlist", "password1_errorlist", "password2_errorlist"]
+
+            errorList.forEach(function(elementId) {
+                const element = document.getElementById(elementId);
+                const elementList = element.getElementsByTagName("li");
+
+                if (element !== null && elementList.length > 1) element.classList.add("list-disc")
+            });
+        </script>
+    {% endif %}
+{% endblock%}

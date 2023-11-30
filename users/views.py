@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from .forms import UserRegisterForm
 from django.contrib.auth import login, authenticate
 from .decorators import redirect_authenticated_user
 
@@ -7,7 +7,7 @@ from .decorators import redirect_authenticated_user
 @redirect_authenticated_user
 def register(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get("username")
@@ -16,5 +16,5 @@ def register(request):
             login(request, user)
             return redirect("/")
     else:
-        form = UserCreationForm()
+        form = UserRegisterForm()
     return render(request, "users/register.html", {"form": form})

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p>welcome, {{ user.get_username }}</p>
+    <p class="text-3xl text-green-800">welcome, {{ user.get_username }}</p>
 
     {% if note_list %}
         <ul>

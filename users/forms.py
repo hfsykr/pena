@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(
         max_length=254,
-        widget=forms.EmailInput(attrs={'autocomplete': 'email'}),
+        widget=forms.EmailInput(attrs={"autocomplete": "email"}),
         help_text="Required. Must be a valid email address.",
     )
 

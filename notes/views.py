@@ -12,7 +12,7 @@ def index(request):
     user_id = request.user.id
     # Get notes owned by user in session, ordered by updated date first, and created date if it is null (newly created)
     note_list = Note.objects.filter(user_id=user_id).order_by(Coalesce("updated", "created").desc())
-    return render(request, "notes/index.html", {"note_list": note_list})
+    return render(request, "index.html", {"note_list": note_list})
 
 @login_required
 @user_required

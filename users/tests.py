@@ -35,5 +35,6 @@ class UserTests(TestCase):
 
     def test_logout(self):
         response = self.client.get("/logout/")
-        self.assertFalse(response.wsgi_request.user.is_authenticated) # False because AnonymousUser (not logged in)
+        # False because AnonymousUser (not logged in)
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
     

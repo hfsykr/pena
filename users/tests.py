@@ -1,9 +1,35 @@
 from django.test import TestCase
 from django.test import Client
+from .forms import UserRegisterForm
 from django.contrib.auth.models import User
 
 # Create your tests here.
-class UserTests(TestCase):
+class UserFormTests(TestCase):
+    def setUp(self):
+        self.credentials = {
+            "username": "user",
+            "email": "user@mail.com",
+            "password1": "password user",
+            "password2": "password user",
+        }
+
+        self.bad_passwords = {
+            "password1": "password",
+            "password2": "password",
+        }
+    
+    def test_override_password2_to_password1_error(self):
+        # Form will be invalid because "password" is a common password
+        form = UserRegisterForm(self.bad_passwords)
+        # If it is return True, then password2 error not overwritten completly to password1
+        self.assertFalse("password2" in form.errors)
+
+    def test_email_save(self):
+        form = UserRegisterForm(self.credentials)
+        user = form.save(commit=False)
+        self.assertEqual(user.email, self.credentials["email"])
+
+class UserViewTests(TestCase):
     def setUp(self):
         self.client = Client()
 

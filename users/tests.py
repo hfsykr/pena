@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.test import Client
 from .forms import UserRegisterForm
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 # Create your tests here.
 class UserFormTests(TestCase):
@@ -45,22 +46,22 @@ class UserViewTests(TestCase):
             "password": "password user login",
         }
 
-        # Create new user for login without using /register/ view
-        # so when test /register/ view failed, login test not failed too.
+        # Create new user for login
         User.objects.create_user(**self.login_credentials)
         
     def test_register(self):
-        client = Client() # New instance, so session not saved in self.
-        response = client.post("/register/", self.register_credentials)
+        response = self.client.post(reverse("register"), self.register_credentials)
         # After register, user is automatically logged in
         self.assertTrue(response.wsgi_request.user.is_authenticated)
 
-    def test_login(self):
-        response = self.client.post("/login/", self.login_credentials)
+    def test_login_logout(self):
+        # Login
+        response = self.client.post(reverse("login"), self.login_credentials)
+        # True if user_login logged in
         self.assertTrue(response.wsgi_request.user.is_authenticated)
-
-    def test_logout(self):
-        response = self.client.get("/logout/")
+        
+        # Logout
+        response = self.client.get(reverse("logout"))
         # False because AnonymousUser (not logged in)
         self.assertFalse(response.wsgi_request.user.is_authenticated)
     

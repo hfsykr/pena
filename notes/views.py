@@ -18,6 +18,9 @@ def index(request):
 @login_required
 @user_required
 def detail(request, note_id):
+    user_id = request.user.id
+    search = request.GET.get("search", "")
+    note_list = Note.objects.filter(user_id=user_id, title__contains=search).order_by(Coalesce("updated", "created").desc())
     note = Note.objects.get(pk=note_id)
     if request.method == "POST":
         form = DetailNoteForm(request.POST, instance=note)
@@ -26,7 +29,7 @@ def detail(request, note_id):
             return redirect("notes:detail", note_id=note.id)
     else:
         form = DetailNoteForm(instance=note)
-    return render(request, "notes/detail.html", {"form": form})
+    return render(request, "notes/detail.html", {"form": form, "note_list": note_list, "note_id": note_id})
 
 @login_required
 def create(request):

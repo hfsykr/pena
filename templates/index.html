@@ -6,11 +6,11 @@
         {% include "navbar.html" %}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-5">
         {% for note in note_list %}
-            <form class="relative group" method="post" action="{% url 'notes:delete' note.id %}?ref={{ request.get_full_path }}">
+            <form id="search-form" class="relative group" method="post" action="{% url 'notes:delete' note.id %}?ref={{ request.get_full_path }}">
                 {% csrf_token %}
                 <a href="{% url 'notes:detail' note.id %}"  class="flex flex-col h-16 border border-gray-300 dark:border-gray-800">
                     <p class="text-xs font-bold uppercase text-center bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-200 py-1">Note</p>
-                    <p class="note-title text-sm font-medium h-full truncate bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-gray-300 px-2.5 py-2 group-hover:border-b-blue-500 dark:group-hover:border-b-blue-500 group-hover:border-b-4">{% if note.title != "" %} {{ note.title}} {% else %} untitled {% endif %}</p>
+                    <p class="note-title text-sm font-medium h-full truncate bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-gray-300 px-2.5 py-2 group-hover:border-b-blue-500 group-hover:border-b-4">{% if note.title != "" %} {{ note.title}} {% else %} untitled {% endif %}</p>
                     <div id="tooltip-{{ forloop.counter0 }}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:text-gray-900 dark:bg-white">
                         {% if note.title != "" %} {{ note.title}} {% else %} untitled {% endif %}
                         <div class="tooltip-arrow" data-popper-arrow></div>
@@ -24,7 +24,7 @@
             </form>
         {% endfor %}
         </div> 
-        <a href="{% url 'notes:create' %}" class="fixed bottom-10 right-10 md:bottom-16 md:right-16 xl:bottom-20 xl:right-20 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full p-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+        <a href="{% url 'notes:create' %}" class="fixed bottom-10 right-10 md:bottom-16 md:right-16 xl:bottom-20 xl:right-20 text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-full p-5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             <svg class="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M.188 5H5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707c-.358.362-.617.81-.753 1.3C.148 5.011.166 5 .188 5ZM14 8a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm2 7h-1v1a1 1 0 0 1-2 0v-1h-1a1 1 0 0 1 0-2h1v-1a1 1 0 0 1 2 0v1h1a1 1 0 0 1 0 2Z"/>
                 <path d="M6 14a7.969 7.969 0 0 1 10-7.737V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H.188A.909.909 0 0 1 0 6.962V18a1.969 1.969 0 0 0 1.933 2h6.793A7.976 7.976 0 0 1 6 14Z"/>

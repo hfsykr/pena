@@ -11,7 +11,7 @@
                     {% csrf_token %}
                     <a href="{% url 'notes:detail' note.id %}"  class="flex flex-col h-16 border border-gray-300 dark:border-gray-800">
                         <p class="text-xs font-bold uppercase text-center bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-200 py-1">Note</p>
-                        <p class="note-title text-sm font-medium h-full truncate bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-gray-300 px-2.5 py-2 group-hover:border-b-blue-500 dark:group-hover:border-b-blue-500 group-hover:border-b-4">{% if note.title != "" %} {{ note.title}} {% else %} untitled {% endif %}</p>
+                        <p class="note-title text-sm font-medium h-full truncate bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-gray-300 px-2.5 py-2 group-hover:border-b-blue-500 group-hover:border-b-4">{% if note.title != "" %} {{ note.title}} {% else %} untitled {% endif %}</p>
                         <div id="tooltip-{{ forloop.counter0 }}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:text-gray-900 dark:bg-white">
                             {% if note.title != "" %} {{ note.title}} {% else %} untitled {% endif %}
                             <div class="tooltip-arrow" data-popper-arrow></div>

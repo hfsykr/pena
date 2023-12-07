@@ -1,7 +1,7 @@
 /* For Note Title Tooltip */
-const title = document.querySelectorAll(".note-title");
+const noteTitles = document.querySelectorAll(".note-title");
 
-title.forEach((element, index) => {
+noteTitles.forEach((element, index) => {
     var overflow = element.scrollWidth > element.offsetWidth;
     // Connect tooltip to the title if the title text is overflowing
     if (overflow) {

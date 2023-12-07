@@ -9,8 +9,10 @@ from .forms import NoteForm, DetailNoteForm
 @login_required
 def index(request):
     user_id = request.user.id
+    # Search parameter, default "" if parameter not provided (will return all notes).
+    search = request.GET.get("search", "")
     # Get notes owned by user in session, ordered by updated date first, and created date if it is null (newly created)
-    note_list = Note.objects.filter(user_id=user_id).order_by(Coalesce("updated", "created").desc())
+    note_list = Note.objects.filter(user_id=user_id, title__contains=search).order_by(Coalesce("updated", "created").desc())
     return render(request, "index.html", {"note_list": note_list})
 
 @login_required
@@ -28,6 +30,9 @@ def detail(request, note_id):
 
 @login_required
 def create(request):
+    user_id = request.user.id
+    search = request.GET.get("search", "")
+    note_list = Note.objects.filter(user_id=user_id, title__contains=search).order_by(Coalesce("updated", "created").desc())
     if request.method == "POST":
         form = NoteForm(request.POST)
         if form.is_valid():
@@ -37,7 +42,7 @@ def create(request):
             return redirect("notes:detail", note_id=note.id)
     else:
         form = NoteForm()
-    return render(request, "notes/create.html", {"form": form})
+    return render(request, "notes/create.html", {"form": form, "note_list": note_list})
 
 @login_required
 @user_required

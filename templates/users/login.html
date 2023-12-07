@@ -1,15 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block script_header %}
-    {{ block.super }}
-    <script src="{% static 'users/form.js' %}"></script>
-{% endblock %}
-
 {% block content %}
 <div class="flex h-screen bg-white dark:bg-gray-900">
     <div class="w-3/4 hidden md:block overflow-hidden h-full">
-        <img class="w-full h-full" src="{% static 'users/background.jpg' %}" alt="Login Background">
+        <img class="w-full h-full" src="{% static 'img/background.jpg' %}" alt="Login Background">
     </div>
     <div class="flex flex-col w-full md:w-1/4 h-full">
         <div class="flex items-center justify-end w-full px-5 py-2">
@@ -62,4 +57,9 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block script_footer %}
+    {{ block.super }}
+    <script src="{% static 'js/form.js' %}"></script>
 {% endblock %}

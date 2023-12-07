@@ -1,15 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block script_header %}
-    {{ block.super }}
-    <script src="{% static 'users/form.js' %}"></script>
-{% endblock %}
-
 {% block content %}
 <div class="flex h-screen bg-white dark:bg-gray-900">
     <div class="w-3/4 hidden md:block overflow-hidden h-full">
-        <img class="w-full h-full" src="{% static 'users/background.jpg' %}" alt="Login Background">
+        <img class="w-full h-full" src="{% static 'img/background.jpg' %}" alt="Login Background">
     </div>
     <div class="flex flex-col w-full md:w-1/4 h-full">
         <div class="flex items-center justify-end w-full px-5 py-2">
@@ -119,28 +114,27 @@
 
 {% block script_footer %}
     {{ block.super }}
-
+    <script src="{% static 'js/form.js' %}"></script>
     {% if not form.password1.errors %}
-        <script>
-            // can't iterate trough help_text from django template (it generated like a string not a list)
-            // so i write this to make the class of list (or string) generated customizable by tailwind css.
-            document.querySelectorAll("#password1_helptext ul")[0].classList.add("list-disc", "list-inside");
-        </script>
+    <script>
+        // can't iterate trough help_text from django template (it generated like a string not a list)
+        // so i write this to make the class of list (or string) generated customizable by tailwind css.
+        document.querySelectorAll("#password1_helptext ul")[0].classList.add("list-disc", "list-inside");
+    </script>
     {% endif %}
-    
     {% if form.errors %}
-        <script>
-            // can't find how to determine if variable an iterable or not in django template
-            // or maybe form.field.errors is not iterable by default
-            // i write this to check if form.field.errors only have 1 error or not.
-            var errorList = ["username_errorlist", "email_errorlist", "password1_errorlist", "password2_errorlist"]
+    <script>
+        // can't find how to determine if variable an iterable or not in django template
+        // or maybe form.field.errors is not iterable by default
+        // i write this to check if form.field.errors only have 1 error or not.
+        var errorList = ["username_errorlist", "email_errorlist", "password1_errorlist", "password2_errorlist"]
 
-            errorList.forEach(function(elementId) {
-                const element = document.getElementById(elementId);
-                const elementList = element.getElementsByTagName("li");
+        errorList.forEach(function(elementId) {
+            const element = document.getElementById(elementId);
+            const elementList = element.getElementsByTagName("li");
 
-                if (element !== null && elementList.length > 1) element.classList.add("list-disc")
-            });
-        </script>
+            if (element !== null && elementList.length > 1) element.classList.add("list-disc")
+        });
+    </script>
     {% endif %}
-{% endblock%}
+{% endblock %}

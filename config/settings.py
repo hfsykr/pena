@@ -33,7 +33,7 @@ DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 # Enable or disable admin
 ADMIN_ENABLED = os.getenv("ADMIN_ENABLED", "False").lower() == "true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split()
 
 
 # Application definition
@@ -137,6 +137,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+STATIC_ROOT = os.getenv("STATIC_ROOT")
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',

@@ -3,3 +3,4 @@ psycopg-binary==3.1.12
 psycopg==3.1.12
 python-dotenv==1.0.0
 django-browser-reload==1.12.1
+gunicorn==21.2.0

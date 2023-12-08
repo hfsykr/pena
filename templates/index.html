@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="flex flex-col min-h-screen bg-white dark:bg-gray-900 p-5">
-        {% include "navbar.html" %}
+        {% include "navbar.html" with search_ref=request.get_full_path %}
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-5">
         {% for note in note_list %}
             <form id="search-form" class="relative group" method="post" action="{% url 'notes:delete' note.id %}?ref={{ request.get_full_path }}">

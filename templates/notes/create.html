@@ -3,48 +3,22 @@
 
 {% block content %}
     <div class="flex flex-col h-screen bg-white dark:bg-gray-900 p-5">
-        {% include "navbar.html" with search_ref=request.get_full_path %}
-        <div class="flex mt-5 h-full max-h-screen overflow-y-scroll gap-4">
-            <div class="hidden md:flex md:flex-col w-full md:w-1/4 gap-4 overflow-y-scroll pr-4">
-                {% for note in note_list %}
-                <form class="relative group" method="post" action="{% url 'notes:delete' note.id %}?ref={{ request.get_full_path }}">
-                    {% csrf_token %}
-                    <a href="{% url 'notes:detail' note.id %}"  class="flex flex-col h-16 border border-gray-300 dark:border-gray-800">
-                        <p class="text-xs font-bold uppercase text-center bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-200 py-1">Note</p>
-                        <p class="note-title text-sm font-medium h-full truncate bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-gray-300 px-2.5 py-2 group-hover:border-b-blue-500 group-hover:border-b-4">{% if note.title != "" %} {{ note.title}} {% else %} untitled {% endif %}</p>
-                        <div id="tooltip-{{ forloop.counter0 }}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:text-gray-900 dark:bg-white">
-                            {% if note.title != "" %} {{ note.title}} {% else %} untitled {% endif %}
-                            <div class="tooltip-arrow" data-popper-arrow></div>
-                        </div>
-                    </a>
-                    <button type="submit" class="absolute top-1 end-1 text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300  rounded-full p-1 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 hidden group-hover:block">
-                        <svg class="w-2 h-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                        </svg>
-                    </button>
-                </form>
-                {% endfor %}
+        {% include "navbar.html" %}
+        <form class="flex-1 flex justify-center my-5" method="post" action="{% url 'notes:create' %}">
+            {% csrf_token %}
+            <div class="relative flex flex-col w-full max-w-5xl border-2 border-gray-400 dark:border-gray-600">
+                <input type="text" class="text-sm w-full p-2.5 bg-white dark:bg-gray-900 dark:placeholder-gray-400 text-gray-900 dark:text-white border-0 focus:ring-0" name="title" maxlength="200" id="id_title" placeholder="Write your title here...">
+                <hr class="h-[1px] bg-gray-300 dark:bg-gray-700 border-0">
+                <textarea  class="text-sm w-full h-full p-2.5 bg-white dark:bg-gray-900 dark:placeholder-gray-400 text-gray-900 dark:text-white border-0 resize-none focus:ring-0"  name="content" id="id_content" placeholder="Write your note here..."></textarea>
+                <button type="submit" class="absolute bottom-5 right-5 md:bottom-8 md:right-8 xl:bottom-10 xl:right-10 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-2xl p-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    <svg class="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                        <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
+                        <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2Zm-2.359 10.707-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L7 12.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                    </svg>
+                </button>
             </div>
-            <div class="flex flex-col w-full md:w-3/4">
-                <form class="flex flex-col h-full" method="post" action="{% url 'notes:create' %}">
-                    {% csrf_token %}
-                    <div class="mb-5">
-                        <label for="id_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
-                        <input type="text" class="block p-2.5 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="title" maxlength="200" id="id_title" placeholder="Write your title here...">
-                    </div>
-                    <div class="flex flex-col h-full">
-                        <label for="id_content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
-                        <textarea  class="block p-2.5 h-full w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-none"  name="content" id="id_content" placeholder="Write your note here..."></textarea>
-                    </div>
-                    <button type="submit" class="fixed bottom-10 right-10 md:bottom-16 md:right-16 xl:bottom-20 xl:right-20 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full p-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                        <svg class="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
-                            <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
-                            <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2Zm-2.359 10.707-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L7 12.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                        </svg>
-                    </button>
-                </form>
-            </div>
-        </div>
+        </form>
+        {% include "footer.html" %}
     </div>
 {% endblock %}
 

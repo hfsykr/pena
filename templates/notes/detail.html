@@ -4,12 +4,15 @@
 {% block content %}
     <div class="flex flex-col h-screen bg-white dark:bg-gray-900 p-5">
         {% include "navbar.html" %}
-        <form class="flex-1 flex justify-center my-5" method="post" action="{% url 'notes:detail' note_id %}">
+        <form id="form-editor" class="flex-1 flex justify-center my-5" method="post" action="{% url 'notes:detail' note_id %}">
             {% csrf_token %}
             <div class="relative flex flex-col w-full max-w-5xl border-2 border-gray-400 dark:border-gray-600">
                 <input type="text" class="text-sm w-full p-2.5 bg-white dark:bg-gray-900 dark:placeholder-gray-400 text-gray-900 dark:text-white border-0 read-only:text-gray-600 dark:read-only:text-gray-300 focus:ring-0" name="title" maxlength="200" id="id_title" placeholder="{% if form.title.value != '' %}Write your title here...{% else %}Untitled{% endif %}" value="{{ form.title.value }}" readonly>
                 <hr class="h-[1px] bg-gray-300 dark:bg-gray-700 border-0">
-                <textarea  class="text-sm w-full h-full p-2.5 bg-white dark:bg-gray-900 dark:placeholder-gray-400 text-gray-900 dark:text-white border-0 resize-none read-only:text-gray-600 dark:read-only:text-gray-300 focus:ring-0"  name="content" id="id_content" placeholder="Write your note here..." readonly>{{ form.content.value }}</textarea>
+                <div id="editor" class="text-sm w-full h-full p-2.5 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 border-0 outline-none cursor-text overflow-y-scroll empty:before:content-[attr(placeholder)] empty:before:text-gray-400" placeholder="Write your note here...">
+                    {{ form.content.value|safe }}
+                </div>
+                <textarea class="hidden" name="content" id="id_content" readonly></textarea>
                 <button type="button" id="button-edit" class="absolute bottom-5 right-5 md:bottom-8 md:right-8 xl:bottom-10 xl:right-10 text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 rounded-2xl p-5 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
                     <svg class="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                         <path d="M12.687 14.408a3.01 3.01 0 0 1-1.533.821l-3.566.713a3 3 0 0 1-3.53-3.53l.713-3.566a3.01 3.01 0 0 1 .821-1.533L10.905 2H2.167A2.169 2.169 0 0 0 0 4.167v11.666A2.169 2.169 0 0 0 2.167 18h11.666A2.169 2.169 0 0 0 16 15.833V11.1l-3.313 3.308Zm5.53-9.065.546-.546a2.518 2.518 0 0 0 0-3.56 2.576 2.576 0 0 0-3.559 0l-.547.547 3.56 3.56Z"/>
@@ -31,9 +34,9 @@
 {% block script_footer %}
     {{ block.super }}
     <script src="{% static 'js/notes.js' %}"></script>
+    <script src="{% static 'js/editor.js' %}"></script>
     <script>
         const title = document.getElementById("id_title");
-        const content = document.getElementById("id_content");
         const buttonEdit = document.getElementById("button-edit");
         const buttonSave = document.getElementById("button-save");
 
@@ -41,7 +44,9 @@
             buttonEdit.classList.add("hidden");
             buttonSave.classList.remove("hidden");
             title.removeAttribute("readonly");
-            content.removeAttribute("readonly");
+            editor.setAttribute("contenteditable", true);
+            editor.classList.remove("text-gray-600", "dark:text-gray-300");
+            editor.classList.add("text-gray-900", "dark:text-white");
         });
     </script>
 {% endblock%}

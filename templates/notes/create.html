@@ -4,12 +4,13 @@
 {% block content %}
     <div class="flex flex-col h-screen bg-white dark:bg-gray-900 p-5">
         {% include "navbar.html" %}
-        <form class="flex-1 flex justify-center my-5" method="post" action="{% url 'notes:create' %}">
+        <form id="form-editor" class="flex-1 flex justify-center my-5 overflow-auto" method="post" action="{% url 'notes:create' %}">
             {% csrf_token %}
             <div class="relative flex flex-col w-full max-w-5xl border-2 border-gray-400 dark:border-gray-600">
-                <input type="text" class="text-sm w-full p-2.5 bg-white dark:bg-gray-900 dark:placeholder-gray-400 text-gray-900 dark:text-white border-0 focus:ring-0" name="title" maxlength="200" id="id_title" placeholder="Write your title here...">
+                <input type="text" id="id_title" class="text-sm w-full p-2.5 bg-white dark:bg-gray-900 dark:placeholder-gray-400 text-gray-900 dark:text-white border-0 focus:ring-0" name="title" maxlength="200" placeholder="Write your title here...">
                 <hr class="h-[1px] bg-gray-300 dark:bg-gray-700 border-0">
-                <textarea  class="text-sm w-full h-full p-2.5 bg-white dark:bg-gray-900 dark:placeholder-gray-400 text-gray-900 dark:text-white border-0 resize-none focus:ring-0"  name="content" id="id_content" placeholder="Write your note here..."></textarea>
+                <div id="editor" class="text-sm w-full h-full p-2.5 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-0 outline-none cursor-text overflow-y-scroll empty:before:content-[attr(placeholder)] empty:before:text-gray-400" contenteditable="true" placeholder="Write your note here..."></div>
+                <textarea class="hidden" name="content" id="id_content"></textarea>
                 <button type="submit" class="absolute bottom-5 right-5 md:bottom-8 md:right-8 xl:bottom-10 xl:right-10 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-2xl p-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                     <svg class="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
                         <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
@@ -25,4 +26,5 @@
 {% block script_footer %}
     {{ block.super }}
     <script src="{% static 'js/notes.js' %}"></script>
-{% endblock%}
+    <script src="{% static 'js/editor.js' %}"></script>
+{% endblock %}

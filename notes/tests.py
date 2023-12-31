@@ -49,11 +49,9 @@ class NoteViewTests(TestCase):
         self.assertContains(note_detail, "Test note title 1")
         # Update the note
         response = self.client.post(reverse("notes:detail", args=[self.note.id]), data={"title": "Updated test note title 1", "content": "Updated test content 1"})
-        # Automatically redirected to note's detail/page after note's successfully updated
-        note_detail = self.client.get(response.url)
         # Note's title on note detail changed after update
-        self.assertNotContains(note_detail, "Test note title 1")
-        self.assertContains(note_detail, "Updated test note title 1")
+        self.assertNotContains(response, "Test note title 1")
+        self.assertContains(response, "Updated test note title 1")
 
     def test_view_delete_note(self):
         # Delete note via view

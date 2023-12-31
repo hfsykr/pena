@@ -20,5 +20,5 @@ searchForm.addEventListener("submit", (event) => {
         event.preventDefault();
         return false;		
     }
-    // Do nothing, the form will be submitted.
+    // Do nothing, the form will be submitted
 });

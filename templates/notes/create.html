@@ -6,7 +6,7 @@
         {% include "navbar.html" %}
         <form id="form-editor" class="flex-1 flex justify-center my-5 overflow-auto" method="post" action="{% url 'notes:create' %}">
             {% csrf_token %}
-            <div class="relative flex flex-col w-full max-w-5xl border-2 border-gray-400 dark:border-gray-600">
+            <div class="relative md:basis-3/4 flex flex-col w-full border-2 border-gray-400 dark:border-gray-600">
                 <input type="text" id="id_title" class="text-sm w-full p-2.5 bg-white dark:bg-gray-900 dark:placeholder-gray-400 text-gray-900 dark:text-white border-0 focus:ring-0" name="title" maxlength="200" placeholder="Write your title here...">
                 <hr class="h-[1px] bg-gray-300 dark:bg-gray-700 border-0">
                 <div id="editor" class="text-sm w-full h-full p-2.5 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-0 outline-none cursor-text overflow-y-scroll empty:before:content-[attr(placeholder)] empty:before:text-gray-400" contenteditable="true" placeholder="Write your note here..."></div>
@@ -27,4 +27,20 @@
     {{ block.super }}
     <script src="{% static 'js/notes.js' %}"></script>
     <script src="{% static 'js/editor.js' %}"></script>
+    <script>
+        formEditor.addEventListener("submit", (e) => {
+            /* Wrap with element <p> if there's only one element inside of editor
+            I don't know why but this is by default, the first element will be raw text
+            And not enclosed by <p> element */
+            if (editor.childNodes.length === 1) {
+                const wrapper = document.createElement("p");
+
+                if (!editor.firstChild.hasChildNodes()) {
+                    wrap(editor.firstChild, wrapper);
+                }
+            }
+
+            content.value = editor.innerHTML;
+        });
+    </script>
 {% endblock %}

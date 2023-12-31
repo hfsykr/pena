@@ -28,5 +28,6 @@ jobs:
             cd ${{ secrets.WORK_DIR }}
             git pull
             source venv/bin/activate
+            pip install -r requirements.txt
             python manage.py collectstatic --clear --noinput &> /dev/null
             sudo systemctl restart ${{ secrets.APP_SERVICE }}
